@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyShield | Weather & Disaster Alerts</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- SECTION 1: Header -->
+     <header>
+        <h1> SkyShield </h1>
+        <p>Your personal weather & disaster alert system</p>
+     </header>
+     <!-- SECTION 2: Search Bar -->
+     <section id="search-section">
+        <input type="text" id="city-input" placeholder="Enter city name...eg.Chandigarh" autocomplete="off"/>
+        <button id="search-btn">Search Weather</button>
+     </section>
+    <!-- SECTION 3: Alert Banner -->
+    <div id="alert-banner" class="alert-hidden">
+        <span id="alert-icon">⚠️</span>
+        <span id="alert-message">No active alerts</span>
+    </div>
+
+    <!-- SECTION 4: Weather Card -->
+    <section id="weather-card" class="hidden">
+        <div id="city-name">City Name</div>
+        <div id="date">Monday, 1 Jan</div>
+
+        <img id="weather-icon" src="" alt="weather icon"/>
+        <div id="temperature">--°C</div>
+        <div id="description">--</div>
+
+        <div id="weather-details">
+            <div class="detail-box">
+                <span class="detail-label">Humidity</span>
+                <span id="humidity" class="detail-value">--%</span>
+            </div>
+            <div class="detail-box">
+                <span class="detail-label">Wind Speed</span>
+                <span id="wind" class="detail-value">-- km/h</span>
+            </div>
+            <div class="detail-box">
+                <span class="detail-label">Feels Like</span>
+                <span id="feels-like" class="detail-value">--°C</span>
+            </div>
+            <div class="detail-box">
+                <span class="detail-label">Visibility</span>
+                <span id="visibility" class="detail-value">-- km</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: 5-Day Forecast -->
+    <section id="forecast-section" class="hidden">
+        <h2>5-Day Forecast</h2>
+        <div id="forecast-cards">
+            <!-- JavaScript will fill forecast cards here -->
+        </div>
+    </section>
+
+    <!-- SECTION 6: Disaster Safety Tips -->
+    <section id="safety-section" class="hidden">
+        <h2>🛡️ Safety Resources</h2>
+        <div id="safety-links">
+            <a href="https://ndma.gov.in" target="_blank">
+                🏛️ NDMA — National Disaster Management
+            </a>
+            <a href="https://mausam.imd.gov.in" target="_blank">
+                🌦️ IMD — India Meteorological Department
+            </a>
+            <a href="https://sachet.ndma.gov.in" target="_blank">
+                📱 SACHET — Disaster Alert Portal
+            </a>
+        </div>
+    </section>
+
+    <!-- SECTION 7: Footer -->
+    <footer>
+        <p>Made by Aanya | SkyShield 2026</p>
+        <p>Data from OpenWeatherMap</p>
+    </footer>
+
+    <!-- Connect JavaScript file -->
+    <script src="app.js"></script>
+
+
+</body>
+</html>
