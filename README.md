@@ -59,7 +59,7 @@ SkyShield/
 
 ## Live Demo
 
-🔗 [SkyShield — Live App](https://aanyagupta9.github.io/SkyShield)
+🔗 [SkyShield — Live App](https://aanyagupta9.github.io/skyshield)
 
 ---
 
