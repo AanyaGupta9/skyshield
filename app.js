@@ -23,6 +23,25 @@ const safetySection = document.getElementById("safety-section");
 const loadSpinner = document.getElementById("loading-spinner");
 
 // ================================
+// ERROR HANDLING
+// ================================
+
+function showError(message) {
+  const errorDiv = document.getElementById("error-message");
+  const errorText = document.getElementById("error-text");
+  errorText.textContent = message;
+  errorDiv.classList.remove("hidden");
+
+  // Auto hide after 4 seconds
+  setTimeout(() => {
+    errorDiv.classList.add("hidden");
+  }, 4000);
+}
+
+function hideError() {
+  document.getElementById("error-message").classList.add("hidden");
+}
+// ================================
 // SEARCH BUTTON CLICK EVENT
 // ================================
 
@@ -33,14 +52,14 @@ searchBtn.addEventListener("click", function () {
   forecastSection.classList.add("hidden");
   alertBanner.classList.add("alert-hidden");
   safetySection.classList.add("hidden");
+  hideError();
   if (city === "") {
-    alert("Please enter a city name!");
+    showError("Please enter a city name!");
     return;
   }
 
   fetchWeather(city);
   fetchForecast(city);
-  saveToHistory(city);
 });
 
 cityInput.addEventListener("keypress", function (event) {
@@ -73,13 +92,13 @@ async function fetchWeather(city) {
 
     // Hide spinner
     loadSpinner.classList.add("hidden");
-
+    saveToHistory(city);
     displayWeather(data);
   } catch (error) {
     // Hide spinner
     loadSpinner.classList.add("hidden");
     console.log("Error:", error.message);
-    alert("City not found! Please check the spelling and try again.");
+    showError("City not found! Please check the spelling and try again.");
   }
 }
 
@@ -416,16 +435,16 @@ function displayHistory() {
     btn.className = "history-btn";
     btn.textContent = city;
     btn.style.cssText = `
-    padding: 6px 16px;
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 4px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 50px;
-    color: white;
-    font-size: 13px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 11px;
     font-family: Poppins, sans-serif;
     cursor: pointer;
-    margin: 4px;
-    `;
+    margin: 3px;
+`;
     btn.onclick = () => {
       cityInput.value = city;
       searchBtn.click();
