@@ -10,10 +10,6 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons.min.css"
-    />
   </head>
 
   <body>
@@ -32,6 +28,19 @@
       />
       <button id="search-btn">Search Weather</button>
     </section>
+
+    <!-- LOADING SPINNER -->
+    <div id="loading-spinner" class="hidden">
+      <div class="spinner"></div>
+      <p>Fetching weather data...</p>
+    </div>
+
+    <!-- SEARCH HISTORY -->
+    <div id="search-history" class="hidden">
+      <p class="history-label">Recent searches:</p>
+      <div id="history-buttons"></div>
+    </div>
+
     <!-- SECTION 3: Alert Banner -->
     <div id="alert-banner" class="alert-hidden">
       <span id="alert-icon">⚠️</span>
@@ -63,6 +72,14 @@
         <div class="detail-box">
           <span class="detail-label">Visibility</span>
           <span id="visibility" class="detail-value">-- km</span>
+        </div>
+        <div class="detail-box">
+          <span class="detail-label">Sunrise</span>
+          <span id="sunrise" class="detail-value">--:--</span>
+        </div>
+        <div class="detail-box">
+          <span class="detail-label">Sunset</span>
+          <span id="sunset" class="detail-value">--:--</span>
         </div>
       </div>
     </section>
