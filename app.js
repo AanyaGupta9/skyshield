@@ -1,5 +1,5 @@
 // ================================
-// SKYSHIELD_ - Main JavaScript
+// SKYSHIELD - Main JavaScript
 // Made by Aanya
 // ================================
 
@@ -20,6 +20,7 @@ const alertMessage = document.getElementById("alert-message");
 const alertIcon = document.getElementById("alert-icon");
 const forecastSection = document.getElementById("forecast-section");
 const safetySection = document.getElementById("safety-section");
+const loadSpinner = document.getElementById("loading-spinner");
 
 // ================================
 // SEARCH BUTTON CLICK EVENT
@@ -28,6 +29,10 @@ const safetySection = document.getElementById("safety-section");
 searchBtn.addEventListener("click", function () {
   const city = cityInput.value.trim();
 
+  weatherCard.classList.add("hidden");
+  forecastSection.classList.add("hidden");
+  alertBanner.classList.add("alert-hidden");
+  safetySection.classList.add("hidden");
   if (city === "") {
     alert("Please enter a city name!");
     return;
@@ -35,6 +40,7 @@ searchBtn.addEventListener("click", function () {
 
   fetchWeather(city);
   fetchForecast(city);
+  saveToHistory(city);
 });
 
 cityInput.addEventListener("keypress", function (event) {
@@ -49,6 +55,9 @@ cityInput.addEventListener("keypress", function (event) {
 
 async function fetchWeather(city) {
   try {
+    // Show spinner, hide old data
+    loadSpinner.classList.remove("hidden");
+
     console.log("Calling API for:", city);
 
     const response = await fetch(
@@ -62,8 +71,13 @@ async function fetchWeather(city) {
     const data = await response.json();
     console.log("Weather data received:", data);
 
+    // Hide spinner
+    loadSpinner.classList.add("hidden");
+
     displayWeather(data);
   } catch (error) {
+    // Hide spinner
+    loadSpinner.classList.add("hidden");
     console.log("Error:", error.message);
     alert("City not found! Please check the spelling and try again.");
   }
@@ -114,7 +128,6 @@ function displayWeather(data) {
   document.getElementById("humidity").textContent = `${humidity}%`;
   document.getElementById("wind").textContent = `${windSpeed} km/h`;
   document.getElementById("visibility").textContent = `${visibility} km`;
-  document.getElementById("description").textContent = description;
   document.getElementById("weather-icon").src = iconUrl;
   document.getElementById("weather-icon").style.display = "none";
   document.getElementById("description").textContent =
@@ -127,8 +140,14 @@ function displayWeather(data) {
   // Show date
   displayDate();
 
+  // Show sunrise and sunset
+  displaySunriseSunset(data);
+
   // Check for disaster alerts
   checkAlerts(data);
+
+  // Set dynamic background
+  setDynamicBackground(weatherId, iconCode);
 }
 
 // ================================
@@ -170,6 +189,27 @@ function displayDate() {
 
   document.getElementById("date").textContent =
     `${dayName}, ${date} ${month} ${year}`;
+}
+
+// ================================
+// SUNRISE & SUNSET
+// ================================
+
+function displaySunriseSunset(data) {
+  const sunrise = data.sys.sunrise;
+  const sunset = data.sys.sunset;
+  const timezone = data.timezone;
+
+  const sunriseTime = new Date((sunrise + timezone) * 1000)
+    .toUTCString()
+    .slice(17, 22);
+
+  const sunsetTime = new Date((sunset + timezone) * 1000)
+    .toUTCString()
+    .slice(17, 22);
+
+  document.getElementById("sunrise").textContent = `🌅 ${sunriseTime}`;
+  document.getElementById("sunset").textContent = `🌇 ${sunsetTime}`;
 }
 
 // ================================
@@ -220,6 +260,39 @@ function checkAlerts(data) {
     alertMessage.textContent = `All Clear! Weather is safe in this area.`;
     alertBanner.classList.add("alert-safe");
   }
+}
+
+// ================================
+// DYNAMIC BACKGROUND
+// ================================
+
+function setDynamicBackground(weatherId, iconCode) {
+  const isNight = iconCode.includes("n");
+  let gradient = "";
+
+  if (isNight) {
+    gradient = "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)";
+  } else if (weatherId >= 200 && weatherId < 300) {
+    // Thunderstorm
+    gradient = "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)";
+  } else if (weatherId >= 300 && weatherId < 600) {
+    // Rain/Drizzle
+    gradient = "linear-gradient(135deg, #373b44 0%, #4286f4 50%, #373b44 100%)";
+  } else if (weatherId >= 600 && weatherId < 700) {
+    // Snow
+    gradient = "linear-gradient(135deg, #e0eafc 0%, #cfdef3 50%, #e0eafc 100%)";
+  } else if (weatherId >= 700 && weatherId < 800) {
+    // Fog/Mist
+    gradient = "linear-gradient(135deg, #606c88 0%, #3f4c6b 50%, #606c88 100%)";
+  } else if (weatherId === 800) {
+    // Clear sky
+    gradient = "linear-gradient(135deg, #1a73e8 0%, #0d47a1 50%, #1a1a2e 100%)";
+  } else {
+    // Cloudy
+    gradient = "linear-gradient(135deg, #4b6cb7 0%, #182848 50%, #4b6cb7 100%)";
+  }
+
+  document.body.style.background = gradient;
 }
 
 // ================================
@@ -301,3 +374,67 @@ function displayForecast(data) {
 
   forecastSection.classList.remove("hidden");
 }
+
+// ================================
+// SEARCH HISTORY
+// ================================
+
+function saveToHistory(city) {
+  let history = JSON.parse(localStorage.getItem("searchHistory")) || [];
+
+  // Remove if already exists
+  history = history.filter((c) => c.toLowerCase() !== city.toLowerCase());
+
+  // Add to beginning
+  history.unshift(city);
+
+  // Keep only last 3
+  history = history.slice(0, 3);
+
+  // Save back to localStorage
+  localStorage.setItem("searchHistory", JSON.stringify(history));
+
+  // Update display
+  displayHistory();
+}
+
+function displayHistory() {
+  let history = JSON.parse(localStorage.getItem("searchHistory")) || [];
+  const historyDiv = document.getElementById("search-history");
+  const historyButtons = document.getElementById("history-buttons");
+
+  if (history.length === 0) {
+    historyDiv.classList.add("hidden");
+    return;
+  }
+
+  historyDiv.classList.remove("hidden");
+  historyButtons.innerHTML = "";
+
+  history.forEach((city) => {
+    const btn = document.createElement("button");
+    btn.className = "history-btn";
+    btn.textContent = city;
+    btn.style.cssText = `
+    padding: 6px 16px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px;
+    color: white;
+    font-size: 13px;
+    font-family: Poppins, sans-serif;
+    cursor: pointer;
+    margin: 4px;
+    `;
+    btn.onclick = () => {
+      cityInput.value = city;
+      searchBtn.click();
+    };
+    historyButtons.appendChild(btn);
+  });
+}
+
+// ================================
+// LOAD HISTORY ON PAGE START
+// ================================
+displayHistory();
