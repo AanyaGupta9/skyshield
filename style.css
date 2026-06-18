@@ -521,18 +521,20 @@ footer p {
    ERROR MESSAGE
    ================================ */
 #error-message {
+  width: 100%;
   max-width: 600px;
   margin: 10px auto;
-  padding: 14px 24px;
-  background: rgba(211, 47, 47, 0.3);
-  border: 1px solid rgba(211, 47, 47, 0.6);
+  padding: 10px 20px;
+  background: rgba(211, 47, 47, 0.5);
+  border: 1px solid rgba(211, 47, 47, 0.7);
   border-radius: 50px;
   text-align: center;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   color: white;
   backdrop-filter: blur(10px);
   animation: slideDown 0.3s ease;
+  box-sizing: border-box;
 }
 
 @keyframes slideDown {

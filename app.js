@@ -80,7 +80,7 @@ async function fetchWeather(city) {
     console.log("Calling API for:", city);
 
     const response = await fetch(
-      `${BASE_URL}/weather?q=${city}&appid=${API_KEY}&units=metric`,
+      `${BASE_URL}/weather?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=metric`,
     );
 
     if (!response.ok) {
@@ -147,8 +147,6 @@ function displayWeather(data) {
   document.getElementById("humidity").textContent = `${humidity}%`;
   document.getElementById("wind").textContent = `${windSpeed} km/h`;
   document.getElementById("visibility").textContent = `${visibility} km`;
-  document.getElementById("weather-icon").src = iconUrl;
-  document.getElementById("weather-icon").style.display = "none";
   document.getElementById("description").textContent =
     `${weatherEmoji} ${description}`;
 
@@ -312,6 +310,8 @@ function setDynamicBackground(weatherId, iconCode) {
   }
 
   document.body.style.background = gradient;
+  document.body.style.color =
+    weatherId >= 600 && weatherId < 700 && !isNight ? "#1a1a2e" : "#ffffff";
 }
 
 // ================================
