@@ -61,6 +61,7 @@ SkyShield/
 ├── style.css    → Styling and animations
 ├── app.js       → JavaScript logic and API calls
 └── README.md    → Project documentation
+```
 ---
 
 ## How It Works
@@ -88,5 +89,4 @@ Disaster alert thresholds based on [IMD](https://mausam.imd.gov.in) guidelines.
 ---
 
 *SkyShield | School Project | 2026*
-=======
 ```
